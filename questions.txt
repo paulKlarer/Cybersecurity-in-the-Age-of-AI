@@ -1,5 +1,4 @@
-1. If it takes 5 machines 5 minutes to make 5 widgets, how long would it take 100 machines to make 100 widgets?
-2. In a lake, there is a patch of lily pads. Every day, the patch doubles in size. If it takes 48 days for the patch to cover the entire lake, how long would it take for the patch to cover half of the lake?
-3. A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball. How much does the ball cost?
-4. What is the next number in the sequence: 2, 6, 12, 20, 30, ...?
-5. I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?
+1. Calculate the exact value of 99 to the power of 9.
+2. If you multiply all the integers from 1 to 20 (20 factorial), what is the exact resulting number?
+3. The trophy didn't fit into the brown suitcase because it was too large. What was too large? If I change the word 'large' to 'small', what becomes too small?
+4. Maximilian puts his favorite comic book inside his desk drawer and goes out to play recess. While he is outside, the teacher cleans the room and moves the comic book to a shelf at the back of the classroom. Maximilian returns to the room wanting to read. Where will Maximilian look for his comic book first, and why?

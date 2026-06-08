@@ -12,7 +12,7 @@ url = os.getenv("url")
 username = os.getenv("username")
 password = os.getenv("password")
 connect_timeout_seconds = 60
-read_timeout_seconds = 300
+read_timeout_seconds = 900
 
 def make_request(messages):
     client = httpx.Client(auth=(username, password))
@@ -70,7 +70,7 @@ Do not include multiple tool calls in a single response.
         {"role": "user", "content": "Begin your task."}
     ]
 
-    max_steps = 15
+    max_steps = 30
     for step in range(max_steps):
         try:
             response_text = make_request(messages)
