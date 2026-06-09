@@ -7,11 +7,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Create non-root user for better security simulation
 RUN useradd -m agent
+RUN chown -R agent:agent /app
 USER agent
 
-COPY .env .
-COPY agent.py .
-COPY questions.txt .
-COPY solutions.txt .
+COPY --chown=agent:agent .env .
+COPY --chown=agent:agent agent.py .
+COPY --chown=agent:agent questions.txt .
+COPY --chown=agent:agent solutions.txt .
+COPY --chown=agent:agent set_up_db.py .
+RUN python set_up_db.py
 
 ENTRYPOINT ["python", "agent.py"]
