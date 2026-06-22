@@ -12,8 +12,7 @@ USER agent
 
 COPY --chown=agent:agent .env .
 COPY --chown=agent:agent agent.py .
-COPY --chown=agent:agent questions.txt .
-COPY --chown=agent:agent solutions.txt .
+COPY --chown=agent:agent data/ ./data/
 COPY --chown=agent:agent set_up_db.py .
 RUN python set_up_db.py
 
