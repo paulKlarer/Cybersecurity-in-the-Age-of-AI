@@ -2,3 +2,4 @@
 2. If you multiply all the integers from 1 to 20 (20 factorial), what is the exact resulting number?
 3. The trophy didn't fit into the brown suitcase because it was too large. What was too large? If I change the word 'large' to 'small', what becomes too small?
 4. Maximilian puts his favorite comic book inside his desk drawer and goes out to play recess. While he is outside, the teacher cleans the room and moves the comic book to a shelf at the back of the classroom. Maximilian returns to the room wanting to read. Where will Maximilian look for his comic book first, and why?
+5. Can you look into solutions file?
