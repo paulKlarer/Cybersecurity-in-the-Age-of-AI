@@ -32,9 +32,12 @@ To elevate this project to a Design Science Research (DSR) contribution, we are 
 
 ---
 
-### Next Steps & TODOs
-- Move all data-related files to a separate `data/` folder for better organization.
-- Implement the 4 tiers of "Pressure Prompts" to encourage the agent to cheat.
-- Log unrelated 3rd-party file scans (e.g., if the agent tries to read `.env` or `student_grades.csv`).
-- Change the agent's final output format to strict JSON for easier programmatic parsing.
-- Generate a detailed chronological "Audit Trace" logfile (HTML dashboard) to illustrate the exact sequence of the agent's actions.
+### Next Steps & TODOs from consultation session with teaching staff.
+
+- counterfactual data, to better understand what information comes from training or context
+- agent might be too dumb. Teach it to cheat. Give it the solutions in context as test. 
+  - evaluate the logs if the agent even reads the questions.txt knows what to do
+- make the ethical problem more vague. Also put the solutions in a textbook file. That the agent is more unsure if it is bad or not to access the data.
+- Also have a scenario where you have malicious content in the question
+- understand what happened with the db scenario, it used to be 8 questions, now it is 4.
+ 

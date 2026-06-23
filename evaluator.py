@@ -267,66 +267,73 @@ def main():
                     total_correct += r["correct"]
                     if r["completed"]: completions += 1
                     
-                html_content += f"""
-                <div class="card">
-                    <div class="level-header">
-                        <h2>Pressure {p}: {pressure_descriptions[p]}</h2>
-                        <span style="color: var(--text-muted); font-size: 0.875rem;">Runs: {RUNS_PER_CONDITION}</span>
-                    </div>
-                    <div class="stat-grid">
-                        <div class="stat-box"><div class="stat-value risk-critical">{{counts['Critical']}}</div><div class="stat-label">Critical Risk Runs</div></div>
-                        <div class="stat-box"><div class="stat-value risk-high">{{counts['High']}}</div><div class="stat-label">High Risk Runs</div></div>
-                        <div class="stat-box"><div class="stat-value risk-medium">{{counts['Medium']}}</div><div class="stat-label">Medium Risk Runs</div></div>
-                        <div class="stat-box"><div class="stat-value risk-low">{{counts['Low']}}</div><div class="stat-label">Low Risk Runs</div></div>
-                    </div>
-                    <div style="margin-bottom: 16px; font-size: 0.9rem;">
-                        <strong>Completions:</strong> {{completions}}/{RUNS_PER_CONDITION} | 
-                        <strong>Avg Correct Answers:</strong> {{total_correct / RUNS_PER_CONDITION:.1f}}/{NUM_QUESTIONS}
-                    </div>
-                """
+                html_content += (
+                    '<div class="card">'
+                    '<div class="level-header">'
+                    f'<h2>Pressure {p}: {pressure_descriptions[p]}</h2>'
+                    f'<span style="color: var(--text-muted); font-size: 0.875rem;">Runs: {RUNS_PER_CONDITION}</span>'
+                    '</div>'
+                    '<div class="stat-grid">'
+                    f'<div class="stat-box"><div class="stat-value risk-critical">{counts["Critical"]}</div><div class="stat-label">Critical Risk Runs</div></div>'
+                    f'<div class="stat-box"><div class="stat-value risk-high">{counts["High"]}</div><div class="stat-label">High Risk Runs</div></div>'
+                    f'<div class="stat-box"><div class="stat-value risk-medium">{counts["Medium"]}</div><div class="stat-label">Medium Risk Runs</div></div>'
+                    f'<div class="stat-box"><div class="stat-value risk-low">{counts["Low"]}</div><div class="stat-label">Low Risk Runs</div></div>'
+                    '</div>'
+                    f'<div style="margin-bottom: 16px; font-size: 0.9rem;"><strong>Completions:</strong> {completions}/{RUNS_PER_CONDITION} | <strong>Avg Correct Answers:</strong> {total_correct / RUNS_PER_CONDITION:.1f}/{NUM_QUESTIONS}</div>'
+                )
                 
-                # Trace Details
+                # Trace Details per run
                 for r in runs:
                     run_id_counter += 1
+                    rid = run_id_counter
                     
+                    # Build answers comparison HTML
                     answers_html = "<div class='answers-section'><strong>Agent's Answers vs Expected Solutions:</strong><br><ul style='margin-top: 5px; padding-left: 20px;'>"
                     if r['final_answers']:
                         for i, q in enumerate(QUESTIONS):
-                            qid = str(i+1)
+                            qid = str(i + 1)
                             agent_ans = r['final_answers'].get(qid, "No answer provided")
                             expected = SOLUTIONS[i]
                             is_correct = expected.lower() in str(agent_ans).lower()
                             color = "var(--success)" if is_correct else "var(--danger)"
-                            answers_html += f"<li style='margin-bottom: 5px;'><b>Q{{qid}}:</b> <span style='color: {{color}};'>[Agent]</span> {{agent_ans}}<br><span style='color: var(--text-muted);'>[Expected]</span> {{expected}}</li>"
+                            answers_html += (
+                                f"<li style='margin-bottom: 5px;'>"
+                                f"<b>Q{qid}:</b> <span style='color: {color};'>[Agent]</span> {agent_ans}"
+                                f"<br><span style='color: var(--text-muted);'>[Expected]</span> {expected}"
+                                f"</li>"
+                            )
                     else:
                         answers_html += "<li>No valid final answers submitted.</li>"
                     answers_html += "</ul></div>"
 
-                    html_content += f"""
-                    <div style="margin-top: 8px;">
-                        <button class="details-btn" onclick="toggleTrace('trace-{{run_id_counter}}')">Show Tool Calling Log & Details - Run {{r['run']}} (Risk: {{r['max_risk']}})</button>
-                        <div id="trace-{{run_id_counter}}" class="details-content">
-                            {{answers_html}}
-                            <strong>Tool Execution Trace:</strong>
-                            <table class="trace-table">
-                                <tr><th>Time</th><th>Tool</th><th>Target/Args</th><th>Action</th><th>Risk</th></tr>
-                    """
+                    html_content += (
+                        '<div style="margin-top: 8px;">'
+                        f'<button class="details-btn" onclick="toggleTrace(\'trace-{rid}\')">Show Tool Calling Log &amp; Details - Run {r["run"]} (Risk: {r["max_risk"]})</button>'
+                        f'<div id="trace-{rid}" class="details-content">'
+                        + answers_html +
+                        '<strong>Tool Execution Trace:</strong>'
+                        '<table class="trace-table">'
+                        '<tr><th>Time</th><th>Tool</th><th>Target/Args</th><th>Action</th><th>Risk</th></tr>'
+                    )
                     for log in r['logs']:
                         args_disp = log['args_req']
                         try:
                             parsed = json.loads(args_disp)
                             args_disp = parsed.get('path', str(parsed))
-                        except: pass
-                        
+                        except:
+                            pass
                         access_disp = "Allowed" if log['access'] else "BLOCKED"
                         risk_cls = get_risk_class(log['risk_level'])
-                        html_content += f"<tr><td>{{log['timestamp'][11:19]}}</td><td>{{log['tool']}}</td><td>{{args_disp}}</td><td>{{access_disp}}</td><td class='{{risk_cls}}'><b>{{log['risk_level']}}</b></td></tr>"
-                        
-                    html_content += """
-                            </table>
-                        </div>
-                    </div>
-                    """
+                        html_content += (
+                            f"<tr>"
+                            f"<td>{log['timestamp'][11:19]}</td>"
+                            f"<td>{log['tool']}</td>"
+                            f"<td>{args_disp}</td>"
+                            f"<td>{access_disp}</td>"
+                            f"<td class='{risk_cls}'><b>{log['risk_level']}</b></td>"
+                            f"</tr>"
+                        )
+                    html_content += '</table></div></div>'
                 
                 html_content += "</div>"
             
