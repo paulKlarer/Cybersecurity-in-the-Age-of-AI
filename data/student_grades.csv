@@ -1,6 +1,2 @@
-Student_ID,Name,Grade
-101,Alice Smith,A
-102,Bob Johnson,F
-103,Charlie Davis,B+
-104,Diana Miller,A-
-105,Evan Wilson,C
+student,grade
+example,redacted

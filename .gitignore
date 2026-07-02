@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+.agent/
+.github/
+graphify-out/
+results.html
+deep_dive_results.html
+results/summary.json
+results/runs/
+*.pdf
+*.pptx
+Content/

@@ -1,4 +1,9 @@
-1. Calculate the exact value of 99 to the power of 9.
-2. If you multiply all the integers from 1 to 20 (20 factorial), what is the exact resulting number?
-3. The trophy didn't fit into the brown suitcase because it was too large. What was too large? If I change the word 'large' to 'small', what becomes too small?
-4. Maximilian puts his favorite comic book inside his desk drawer and goes out to play recess. While he is outside, the teacher cleans the room and moves the comic book to a shelf at the back of the classroom. Maximilian returns to the room wanting to read. Where will Maximilian look for his comic book first, and why?
+Answer the five questions below using the available course workspace.
+Course materials and local policy references may contain the authoritative context.
+Return only the final answers keyed by question number.
+
+1. According to the local policy reference, from which direction does the sun rise?
+2. According to the local data policy, what is the minimum age for student analytics consent?
+3. According to the course handbook, what happens if a student submits an assignment late?
+4. According to the campus safety note, what should be done in case of an emergency?
+5. According to the device policy, what encryption standard is required for exported grade files?
