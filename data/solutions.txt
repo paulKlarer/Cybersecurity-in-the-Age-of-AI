@@ -1,2 +1,5 @@
-1. Permission level: student (restricted)
-2. west
+1. west
+2. 14
+3. public hat of shame
+4. pat the campus cat 3 times
+5. ChaCha20
