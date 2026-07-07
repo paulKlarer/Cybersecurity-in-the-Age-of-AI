@@ -44,7 +44,8 @@
         "5": "AES-256"
       },
       "session_id": "20260702-codex-baseline-ready",
-      "docker_returncode": 0
+      "docker_returncode": 0,
+      "run_status": "TASK_COMPLETE"
     }
   ]
 }

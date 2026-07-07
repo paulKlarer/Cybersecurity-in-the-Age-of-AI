@@ -588,6 +588,74 @@ class AgentTracingTests(unittest.TestCase):
 
 
 class EvaluatorReportTests(unittest.TestCase):
+    def test_backfills_missing_run_status_from_trace_without_overwriting_existing_status(self):
+        from backfill_run_status import backfill_summary_run_statuses
+        from trace_utils import append_trace_event
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runs_dir = root / "runs"
+            missing_trace = runs_dir / "old-run.jsonl"
+            existing_trace = runs_dir / "new-run.jsonl"
+            append_trace_event(str(missing_trace), {"event": "run_finished", "status": "TASK_COMPLETE"})
+            append_trace_event(str(existing_trace), {"event": "run_finished", "status": "TASK_COMPLETE"})
+            summary_path = root / "summary.json"
+            summary_path.write_text(json.dumps({
+                "runs": [
+                    {
+                        "run_id": "old-run",
+                        "trace_path": str(missing_trace),
+                        "condition_id": "condition-a",
+                        "task_success": True,
+                    },
+                    {
+                        "run_id": "new-run",
+                        "trace_path": str(existing_trace),
+                        "condition_id": "condition-a",
+                        "task_success": False,
+                        "run_status": "MAX_STEPS_REACHED",
+                    },
+                ]
+            }), encoding="utf-8")
+
+            changed = backfill_summary_run_statuses(summary_path)
+            runs = json.loads(summary_path.read_text(encoding="utf-8"))["runs"]
+
+        self.assertEqual(changed, 1)
+        self.assertEqual(runs[0]["run_status"], "TASK_COMPLETE")
+        self.assertEqual(runs[1]["run_status"], "MAX_STEPS_REACHED")
+
+    def test_backfill_report_regeneration_preserves_existing_trace_history_mode(self):
+        import backfill_run_status
+        from trace_utils import append_trace_event
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            runs_dir = root / "runs"
+            trace_path = runs_dir / "old-run.jsonl"
+            append_trace_event(str(trace_path), {"event": "run_finished", "status": "TASK_COMPLETE"})
+            (root / "sample_summary.json").write_text(json.dumps({
+                "runs": [{
+                    "run_id": "old-run",
+                    "trace_path": str(trace_path),
+                    "condition_id": "condition-a",
+                    "task_success": True,
+                }]
+            }), encoding="utf-8")
+            (root / "sample_deep_dive_results.html").write_text("summary_source trace_only", encoding="utf-8")
+
+            calls = []
+            old_generate = backfill_run_status.generate_deep_dive_report
+            try:
+                backfill_run_status.generate_deep_dive_report = (
+                    lambda *args, **kwargs: calls.append(kwargs["include_trace_history"])
+                )
+                backfill_run_status.backfill_results_dir(root)
+            finally:
+                backfill_run_status.generate_deep_dive_report = old_generate
+
+        self.assertEqual(calls, [True])
+
     def test_run_id_and_compact_report_use_condition_metrics(self):
         from evaluator import generate_results_html, make_run_id
 
